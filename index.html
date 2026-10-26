@@ -142,9 +142,8 @@ body{font-family:'Inter',-apple-system,'Segoe UI',sans-serif;background:var(--bg
 .pm-act{font-size:12.5px;font-weight:600;color:var(--text);line-height:1.4;}
 .pm-why{font-size:11px;color:var(--text3);line-height:1.4;margin-top:2px;}
 
-/* ─── 확인 포인트 (Material Stepper) ─── */
+/* ─── 확인 포인트 ─── */
 .tl-chk{position:relative;margin-bottom:6px;}
-.tl-chk .tl-dot{position:absolute;left:-46px;top:8px;width:14px;height:14px;border-radius:50%;border:2.5px solid var(--green);background:#fff;z-index:2;}
 
 .chk{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--border);border-left:3px solid var(--green-border);border-radius:var(--radius-sm);padding:10px 14px;transition:border-color .15s;}
 .chk:hover{border-left-color:var(--green);}
@@ -317,7 +316,7 @@ function mkFlow(g){
     });
     h+='</div></div></div></div>';
 
-    h+='<div class="tl-chk"><div class="tl-dot"></div><div class="chk"><div class="chk-txt">'+esc(step.verify)+'</div>';
+    h+='<div class="tl-chk"><div class="chk"><div class="chk-txt">'+esc(step.verify)+'</div>';
     if(i<g.steps.length-1) h+='<div class="chk-br"><span class="br-ok">&#x2713; 해결</span><span class="br-no">다음 &#x2192;</span></div>';
     h+='</div></div>';
   });
