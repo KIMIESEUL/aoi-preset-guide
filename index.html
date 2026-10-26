@@ -45,10 +45,10 @@ body{font-family:'Inter',-apple-system,'Segoe UI',sans-serif;background:var(--bg
 .sym-row{display:flex;align-items:center;gap:9px;padding:5px 8px;border-radius:var(--radius-xs);cursor:pointer;transition:background .1s;}
 .sym-row:hover{background:var(--blue-soft);}
 .sym-row input{position:absolute;opacity:0;width:0;height:0;pointer-events:none;}
-.sym-row .cb{width:18px;height:18px;border-radius:4px;border:2px solid #b0b8c1;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s cubic-bezier(.4,0,.2,1);}
-.sym-row .cb svg{width:12px;height:12px;fill:#fff;opacity:0;transform:scale(.5);transition:all .15s cubic-bezier(.4,0,.2,1);}
-.sym-row input:checked+.cb{background:var(--blue);border-color:var(--blue);box-shadow:0 1px 3px rgba(26,115,232,.3);}
-.sym-row input:checked+.cb svg{opacity:1;transform:scale(1);}
+.sym-row .cb{width:18px;height:18px;border-radius:50%;border:2px solid #b0b8c1;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s cubic-bezier(.4,0,.2,1);}
+.sym-row .cb .rb-dot{width:8px;height:8px;border-radius:50%;background:#fff;opacity:0;transform:scale(.5);transition:all .15s cubic-bezier(.4,0,.2,1);}
+.sym-row input:checked+.cb{border-color:var(--blue);box-shadow:0 1px 3px rgba(26,115,232,.3);}
+.sym-row input:checked+.cb .rb-dot{background:var(--blue);opacity:1;transform:scale(1);}
 .sym-row:hover .cb{border-color:#80868b;}
 .sym-row input:checked~span{color:var(--blue-dark);font-weight:600;}
 .sym-row span{font-size:12px;line-height:1.35;user-select:none;color:var(--text);transition:color .12s,font-weight .12s;}
@@ -277,15 +277,16 @@ var cbMap={},partSel=$('partSelect'),selBdg=$('selCount'),resBdg=$('resultCount'
 function $(id){return document.getElementById(id);}
 
 PARTS.forEach(function(pt){var o=document.createElement('option');o.value=pt[0];o.textContent=pt[0];partSel.appendChild(o);});
-Object.entries(CATS).forEach(function(e){var g=document.createElement('div');g.className='cat-group';var lb=document.createElement('div');lb.className='cat-label';lb.textContent=e[0];g.appendChild(lb);e[1].forEach(function(s){var r=document.createElement('label');r.className='sym-row';var cb=document.createElement('input');cb.type='checkbox';cb.addEventListener('change',onSel);cbMap[s]=cb;var bx=document.createElement('span');bx.className='cb';bx.innerHTML='<svg viewBox="0 0 16 16"><path d="M6.5 12L2 7.5l1.4-1.4L6.5 9.2l6.1-6.1L14 4.5z"/></svg>';var sp=document.createElement('span');sp.textContent=s;r.appendChild(cb);r.appendChild(bx);r.appendChild(sp);g.appendChild(r);});symA.appendChild(g);});
+Object.entries(CATS).forEach(function(e){var g=document.createElement('div');g.className='cat-group';var lb=document.createElement('div');lb.className='cat-label';lb.textContent=e[0];g.appendChild(lb);e[1].forEach(function(s){var r=document.createElement('label');r.className='sym-row';var cb=document.createElement('input');cb.type='radio';cb.name='symptom';cb.value=s;cb.addEventListener('change',onSel);cbMap[s]=cb;var bx=document.createElement('span');bx.className='cb';bx.innerHTML='<span class="rb-dot"></span>';var sp=document.createElement('span');sp.textContent=s;r.appendChild(cb);r.appendChild(bx);r.appendChild(sp);g.appendChild(r);});symA.appendChild(g);});
 
-function selectPart(idx){partSel.value=PARTS[idx][0];Object.values(cbMap).forEach(function(c){c.checked=false;});PARTS[idx][1].forEach(function(s){if(cbMap[s]) cbMap[s].checked=true;});onSel();}
+function selectPart(idx){partSel.value=PARTS[idx][0];Object.values(cbMap).forEach(function(c){c.checked=false;});if(PARTS[idx][1].length&&cbMap[PARTS[idx][1][0]]) cbMap[PARTS[idx][1][0]].checked=true;onSel();}
 partSel.addEventListener('change',function(){var idx=PARTS.findIndex(function(p){return p[0]===partSel.value;});if(idx>=0) selectPart(idx);});
 selectPart(0);
-$('btnClear').addEventListener('click',function(){selectPart(0);});
+$('btnClear').addEventListener('click',function(){clearAll();partSel.selectedIndex=0;selectPart(0);});
 document.querySelectorAll('.tab-btn').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('.tab-btn').forEach(function(t){t.classList.remove('active');});b.classList.add('active');tabT.style.display=b.dataset.tab==='trouble'?'':'none';tabD.style.display=b.dataset.tab==='dict'?'':'none';});});
 
 function onSel(){var sel=Object.entries(cbMap).filter(function(e){return e[1].checked;}).map(function(e){return e[0];});if(sel.length){selBdg.textContent=sel.length+'개';selBdg.style.display='';}else{selBdg.style.display='none';}show(sel);}
+function clearAll(){Object.values(cbMap).forEach(function(c){c.checked=false;});onSel();}
 function showEmpty(){resA.innerHTML='<div class="empty-state"><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#bcc1c6" stroke-width="1.2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg><p>좌측에서 <strong>증상을 선택</strong>하면<br>단계별 트러블슈팅 가이드가 표시됩니다</p></div>';}
 function show(sel){resA.innerHTML='';if(!sel.length){resBdg.textContent='';showEmpty();return;}var m=G.filter(function(g){return sel.indexOf(g.sym)!==-1;});resBdg.textContent=m.length?m.length+'개 가이드':'';if(!m.length){resA.innerHTML='<div class="empty-state"><p>해당 가이드가 없습니다</p></div>';return;}m.forEach(function(g){resA.appendChild(mkFlow(g));});}
 
