@@ -309,8 +309,9 @@ function mkFlow(g){
     var ci=Math.min(i,2);
     h+='<div class="tl-step"><div class="tl-num '+nums[ci]+'">'+(i+1)+'</div>';
     h+='<div class="sc '+cols[ci]+'">';
-    h+='<div class="sc-h" onclick="tgl(this)"><span class="sc-tag">'+tags[ci]+'</span><span class="sc-name">'+esc(step.label)+'</span><span class="sc-cnt">'+step.items.length+'개 파라미터</span><span class="sc-arr">'+arrSvg+'</span></div>';
-    h+='<div class="sc-det"><div class="sc-params">';
+    var isFirst=i===0;
+    h+='<div class="sc-h" onclick="tgl(this)"><span class="sc-tag">'+tags[ci]+'</span><span class="sc-name">'+esc(step.label)+'</span><span class="sc-cnt">'+step.items.length+'개 파라미터</span><span class="sc-arr'+(isFirst?' open':'')+'">'+arrSvg+'</span></div>';
+    h+='<div class="sc-det'+(isFirst?' open':'')+'"><div class="sc-params">';
     step.items.forEach(function(it){
       h+='<div class="pm">'+dirIco(it.dir)+'<span class="pm-tag">'+esc(it.p)+'</span><div class="pm-body"><div class="pm-act">'+esc(it.d)+'</div><div class="pm-why">'+esc(it.w)+'</div></div></div>';
     });
