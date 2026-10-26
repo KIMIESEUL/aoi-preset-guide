@@ -121,9 +121,8 @@ body{font-family:'Inter',-apple-system,'Segoe UI',sans-serif;background:var(--bg
 .sc-name{font-size:13px;font-weight:700;flex:1;}
 .sb .sc-name{color:var(--blue-dark);} .sa .sc-name{color:var(--amber-dark);} .sr .sc-name{color:var(--red-dark);}
 .sc-cnt{font-size:11px;color:var(--text3);font-weight:500;}
-.sc-arr{width:20px;height:20px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#f1f3f4;transition:all .2s;flex-shrink:0;}
-.sc-arr svg{width:10px;height:10px;fill:var(--text3);transition:transform .2s;}
-.sc-arr.open{background:var(--blue-soft);} .sc-arr.open svg{transform:rotate(180deg);fill:var(--blue);}
+.sc-arr{width:20px;height:20px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#f1f3f4;transition:all .2s;flex-shrink:0;font-size:9px;color:var(--text3);}
+.sc-arr.open{background:var(--blue-soft);color:var(--blue);transform:rotate(180deg);}
 
 /* 파라미터 (접히는 부분) */
 .sc-det{max-height:0;overflow:hidden;transition:max-height .3s cubic-bezier(.4,0,.2,1);}
@@ -296,7 +295,7 @@ function dirIco(d){
   if(d==='on') return '<span class="pm-dir on">ON</span>';
   return '<span class="pm-dir ch">&#x2794;</span>';
 }
-var arrSvg='<svg viewBox="0 0 10 6"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>';
+var arrSvg='&#x25BC;';
 
 function mkFlow(g){
   var el=document.createElement('div');el.className='fc';
